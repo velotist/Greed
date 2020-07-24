@@ -42,3 +42,74 @@ Status:
 Offen
 
 Titel:
+Benutzer ohne Score
+Story:
+Als Benutzer habe ich keine Einsen oder Fünfen gewürfelt
+Kriterien:
+* Punktzahl gleich null
+-> nächster Spieler dran
+Status:
+Offen
+
+Titel:
+Benutzerscore 1
+Story:
+Als Benutzer habe ich eine Kombination, die mir Punkte bringt
+Kriterien:
+* Score aus Kombination behalten
+-> nächster Spieler dran
+Titel:
+Offen
+
+Titel:
+Benutzerscore 2
+Story:
+Als Benutzer habe ich eine Kombination, die mir Punkte bringt
+Kriterien:
+* alle Würfel neu würfeln
+* bei keiner Kombination Punkte gleich Null
+-> nächster Spieler dran
+** Score aus Kombination behalten
+-> nächster Spieler dran
+*** alle Würfel neu würfeln
+Status:
+Offen
+
+Titel:
+Benutzerscore 3
+Story:
+Als Benutzer habe ich eine Kombination, die mir Punkte bringt
+Kriterien:
+* Kombination aus Punkten ablegen
+* mit restlichen Würfeln erneut würfeln
+-> keine Kombination
+--> nächster Spieler dran
+* Kombination aus restlichen Würfeln
+-> Punkte hinzuaddieren
+Status:
+Offen
+
+Titel:
+Spielende
+Story:
+Als Benutzer möchte ich wissen, wann das Spiel gewonnen ist
+Kriterien:
+* Punktezahl eines Spielers >= 10000
+Status:
+Offen
+
+Titel:
+Punktevergabe
+Story:
+Als Benutzer möchte ich die Regeln umsetzen, für was es Punkte gibt
+Kriterien:
+* jede Eins zählt 100 Punkte
+* jede Fünf zählt 50 Punkte
+* drei Einsen zählen 1000 Punkte und müssen mit einer Eins oder einer Fünf bewiesen werden
+* vier Einsen zählen 10000 Punkte und müssen mit einer Eins oder einer Fünf bewiesen werden
+* Dreier Pasch außer Einsen = Augenzahl * 100 und muss mit einer Eins oder einer Fünf bewiesen werden
+* Vierer Pasch außer Einsen = Augenzahl * 1000 und muss mit einer Eins oder einer Fünf bewiesen werden
+* Straße mit fünf aufeinanderfolgenden Zahlen ergibt 1500 Punkte
+Status:
+Offen
+
