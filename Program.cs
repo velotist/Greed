@@ -68,8 +68,24 @@ namespace Greed
             }
             foreach (var item in players)
             {
-                Console.WriteLine("Spieler {0} würfelte {1}.", item.Name, item.Eyes);
+                Console.WriteLine("{0,21} würfelte {1}", item.Name, item.Eyes);
             }
+
+            int max = players.Max(x => x.Eyes);
+            string firstPlayer = "";
+            foreach (var item in players)
+            {
+                if (item.Eyes == max)
+                {
+                    firstPlayer = item.Name;
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("{0} beginnt...", firstPlayer);
+            Console.WriteLine("Press key to continue...");
+            Console.ReadKey();
+
+            Console.Clear();
 
             int points = 0;
             List<int> dices = new List<int>();
@@ -155,7 +171,7 @@ namespace Greed
             {
                 Console.Write("Bitte Spieleranzahl eingeben (min 2 / max 5): ");
                 _ = int.TryParse(Console.ReadLine(), out numberOfPlayers);
-            } while (numberOfPlayers < 2 || numberOfPlayers > 4);
+            } while (numberOfPlayers < 2 || numberOfPlayers > 5);
 
             return numberOfPlayers;
         }
