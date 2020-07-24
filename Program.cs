@@ -16,10 +16,31 @@ namespace Greed
             Console.Clear();
 
             List<string> namesOfPlayers = new List<string>();
+            string name;
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                Console.Write("Name des Spielers: ");
-                string name = Console.ReadLine();
+                bool isLengthOkay = true, isNameUnique = true;
+                do
+                {
+                    Console.Write("Name des Spielers: ");
+                    name = Console.ReadLine();
+                    if (name.Length < 2 || name.Length > 20)
+                    {
+                        isLengthOkay = false;
+                        Console.WriteLine("Bitte zwischen 2 und 20 Zeichen verwenden.");
+                        Console.WriteLine();
+                    }
+                    else
+                        isLengthOkay = true;
+                    if (namesOfPlayers.Contains(name))
+                    {
+                        isNameUnique = false;
+                        Console.WriteLine("Name bereits vergeben. Bitte anderen Namen angeben.");
+                        Console.WriteLine();
+                    }
+                    else
+                        isNameUnique = true;
+                } while (isLengthOkay == false || isNameUnique == false);
                 namesOfPlayers.Add(name);
                 Console.WriteLine();
             }
