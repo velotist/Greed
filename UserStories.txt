@@ -19,14 +19,26 @@ Kriterien:
 * maximal 20 Buchstaben
 * Name darf nur einmal vorkommen
 Status:
-Teilweise erledigt
+Erledigt
 
 Titel:
 Erster Spieler
 Story:
 Als Benutzer möchte ich den Spieler ermitteln, der zuerst würfelt
 Kriterien:
-* wer die höchste Zahl beim würfeln hat
+* wer die höchste Zahl beim Würfeln hat
 * Stechen, bei gleichen Würfeln
 Status:
 Offen
+
+Titel:
+Würfelbecher schütteln
+Story:
+Als Spieler möchte ich einen Würfelbecher schütteln, um alle sechs Würfelaugen zu ermitteln
+Kriterien:
+* Collection
+* für jeden einzelnen Würfel zufällig ermittelte Augenzahl
+Status:
+Offen
+
+Titel:
