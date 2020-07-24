@@ -15,11 +15,13 @@ namespace Greed
 
             Console.Clear();
 
-            List<string> namesOfPlayers = new List<string>();
+            List<Player> players = new List<Player>();
+            Player player = new Player();
             string name;
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                bool isLengthOkay = true, isNameUnique = true;
+                bool isLengthOkay, isNameUnique = true;
+
                 do
                 {
                     Console.Write("Name des Spielers: ");
@@ -32,37 +34,58 @@ namespace Greed
                     }
                     else
                         isLengthOkay = true;
-                    if (namesOfPlayers.Contains(name))
+
+                    player.Name = name;
+
+                    foreach (var item in players)
                     {
-                        isNameUnique = false;
-                        Console.WriteLine("Name bereits vergeben. Bitte anderen Namen angeben.");
-                        Console.WriteLine();
+                        if (!item.Name.Equals(name))
+                        {
+                            isNameUnique = true;
+                        }
+                        else
+                        {
+                            isNameUnique = false;
+                            Console.WriteLine("Name bereits vergeben. Bitte anderen Namen angeben.");
+                            Console.WriteLine();
+                            break;
+                        }
                     }
-                    else
-                        isNameUnique = true;
                 } while (isLengthOkay == false || isNameUnique == false);
-                namesOfPlayers.Add(name);
+
+                players.Add(new Player() { Name = name });
+
                 Console.WriteLine();
             }
 
             Console.Clear();
 
-            Dice dice = new Dice();
-            int points = 0;
-            List<int> dices = new List<int>();
-            for (int i = 0; i < 5; i++)
+            // Startspieler ermitteln
+            foreach (var item in players)
             {
-                int diceEyes = dice.GetEyes();
-                dices.Add(diceEyes);
+                var eyes = Dice.GetEyes();
+                item.Eyes = eyes;
+            }
+            foreach (var item in players)
+            {
+                Console.WriteLine("Spieler {0} würfelte {1}.", item.Name, item.Eyes);
             }
 
-            Console.WriteLine("Spieler {0} würfelte", namesOfPlayers[0]);
-            Console.WriteLine();
-            foreach (var item in dices)
-            {
-                Console.Write(item + "  ");
-            }
-            Console.WriteLine();
+            int points = 0;
+            List<int> dices = new List<int>();
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    int diceEyes = Dice.GetEyes();
+            //    dices.Add(diceEyes);
+            //}
+
+            //Console.WriteLine("Spieler {0} würfelte", players);
+            //Console.WriteLine();
+            //foreach (var item in dices)
+            //{
+            //    Console.Write(item + "  ");
+            //}
+            //Console.WriteLine();
 
             Dictionary<int, int> dict = Game.GetOccurenceOfEyes(dices);
             foreach (var item in dict)
@@ -93,7 +116,7 @@ namespace Greed
                     }
             }
 
-            Console.WriteLine("Spieler {0} hat {1} Punkte.", namesOfPlayers[0], points);
+            Console.WriteLine("Spieler {0} hat {1} Punkte.", players[0], points);
 
             foreach (var item in dices)
             {
@@ -104,11 +127,17 @@ namespace Greed
         }
     }
 
+    class Player
+    {
+        public string Name { get; set; }
+        public int Eyes { get; set; }
+    }
+
     class Dice
     {
-        Random random = new Random();
+        static Random random = new Random();
 
-        public int GetEyes()
+        public static int GetEyes()
         {
             int eyes = random.Next(1, 7);
 
