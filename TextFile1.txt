@@ -1,0 +1,32 @@
+﻿User stories
+
+Titel:
+Benutzeranzahl
+Story:
+Als Benutzer möchte ich eine Spieleranzahl angeben, um gegen andere spielen zu können
+Kriterien:
+* mindestens 2 Spieler
+* maximal 5 Spieler
+Status:
+Erledigt
+
+Titel:
+Benutzernamen
+Story:
+Als Benutzer möchte ich den Spielern Namen vergeben, um sie erkennen zu können
+Kriterien:
+* mindestens zwei Buchstaben
+* maximal 20 Buchstaben
+* Name darf nur einmal vorkommen
+Status:
+Teilweise erledigt
+
+Titel:
+Erster Spieler
+Story:
+Als Benutzer möchte ich den Spieler ermitteln, der zuerst würfelt
+Kriterien:
+* wer die höchste Zahl beim würfeln hat
+* Stechen, bei gleichen Würfeln
+Status:
+Offen
