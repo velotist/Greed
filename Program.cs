@@ -15,48 +15,9 @@ namespace Greed
 
             Console.Clear();
 
-            List<Player> players = new List<Player>();
-            Player player = new Player();
-            string name;
-            for (int i = 0; i < numberOfPlayers; i++)
-            {
-                bool isLengthOkay, isNameUnique = true;
-
-                do
-                {
-                    Console.Write("Name des Spielers: ");
-                    name = Console.ReadLine();
-                    if (name.Length < 2 || name.Length > 20)
-                    {
-                        isLengthOkay = false;
-                        Console.WriteLine("Bitte zwischen 2 und 20 Zeichen verwenden.");
-                        Console.WriteLine();
-                    }
-                    else
-                        isLengthOkay = true;
-
-                    player.Name = name;
-
-                    foreach (var item in players)
-                    {
-                        if (!item.Name.Equals(name))
-                        {
-                            isNameUnique = true;
-                        }
-                        else
-                        {
-                            isNameUnique = false;
-                            Console.WriteLine("Name bereits vergeben. Bitte anderen Namen angeben.");
-                            Console.WriteLine();
-                            break;
-                        }
-                    }
-                } while (isLengthOkay == false || isNameUnique == false);
-
-                players.Add(new Player() { Name = name });
-
-                Console.WriteLine();
-            }
+            Console.WriteLine("Gib die Namen der Spieler ein...");
+            Console.WriteLine();
+            List<Player> players = Game.NamePlayers(numberOfPlayers);
 
             Console.Clear();
 
@@ -174,6 +135,54 @@ namespace Greed
             } while (numberOfPlayers < 2 || numberOfPlayers > 5);
 
             return numberOfPlayers;
+        }
+
+        public static List<Player> NamePlayers(int numberOfPlayers)
+        {
+            List<Player> players = new List<Player>();
+            Player player = new Player();
+            string name;
+            for (int i = 0; i < numberOfPlayers; i++)
+            {
+                bool isLengthOkay, isNameUnique = true;
+
+                do
+                {
+                    Console.Write("Name des Spielers {0}: ", i + 1);
+                    name = Console.ReadLine();
+                    if (name.Length < 2 || name.Length > 20)
+                    {
+                        isLengthOkay = false;
+                        Console.WriteLine("Bitte zwischen 2 und 20 Zeichen verwenden.");
+                        Console.WriteLine();
+                    }
+                    else
+                        isLengthOkay = true;
+
+                    player.Name = name;
+
+                    foreach (var item in players)
+                    {
+                        if (!item.Name.Equals(name))
+                        {
+                            isNameUnique = true;
+                        }
+                        else
+                        {
+                            isNameUnique = false;
+                            Console.WriteLine("Name bereits vergeben. Bitte anderen Namen angeben.");
+                            Console.WriteLine();
+                            break;
+                        }
+                    }
+                } while (isLengthOkay == false || isNameUnique == false);
+
+                players.Add(new Player() { Name = name });
+
+                Console.WriteLine();
+            }
+
+            return players;
         }
 
         public static Dictionary<int, int> GetOccurenceOfEyes(List<int> list)
