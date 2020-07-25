@@ -33,8 +33,8 @@ namespace Greed
             firstPlayer = Game.DeterminePlayerToStartGame(players);
             Console.WriteLine();
             Console.WriteLine("{0} beginnt...", firstPlayer.Name);
-            Console.WriteLine("Press key to continue...");
-            Console.ReadKey();
+            
+            ControlGame.AwaitKeyAndClearConsole();
 
             Console.Clear();
 
@@ -47,14 +47,11 @@ namespace Greed
                 Console.Write("{0,2}", item.Eyes);
             }
 
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Press key to continue...");
-            Console.ReadKey();
+            ControlGame.AwaitKeyAndClearConsole();
 
             Game.GetPoints(dices);
 
-            Console.ReadKey();
+            ControlGame.AwaitKeyAndClearConsole();
         }
     }
 
@@ -91,6 +88,17 @@ namespace Greed
             }
 
             return dices;
+        }
+    }
+
+    class ControlGame
+    {
+        public static void AwaitKeyAndClearConsole()
+        {
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Press key to continue...");
+            Console.ReadKey();
         }
     }
 
@@ -199,12 +207,12 @@ namespace Greed
         public static int GetPoints(List<Dice> dices)
         {
             int points = 0;
-            Dictionary<int, Dice> toDict = dices.Select((s, i) => new { s, i })
-             .ToDictionary(x => x.i, x => x.s);
+            Dictionary<int, Dice> toDict = dices.Select((s, i) => (s, i))
+                                                .ToDictionary(x => x.i, x => x.s);
 
             foreach (var item in toDict)
             {
-                Console.Write(item.Key + " " + item.Value.Eyes);
+                Console.Write(item.Key + " " + item.Value.Eyes + " ");
             }
 
             return points;
