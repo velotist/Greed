@@ -22,27 +22,10 @@ namespace Greed
             Console.Clear();
 
             // Startspieler ermitteln
-            foreach (var item in players)
-            {
-                var eyes = Dice.GetEyes();
-                item.Eyes = eyes;
-            }
-            foreach (var item in players)
-            {
-                Console.WriteLine("{0,21} würfelte {1}", item.Name, item.Eyes);
-            }
-
-            int max = players.Max(x => x.Eyes);
-            string firstPlayer = "";
-            foreach (var item in players)
-            {
-                if (item.Eyes == max)
-                {
-                    firstPlayer = item.Name;
-                }
-            }
+            Player firstPlayer;
+            firstPlayer = Game.DeterminePlayerToStartGame(players);
             Console.WriteLine();
-            Console.WriteLine("{0} beginnt...", firstPlayer);
+            Console.WriteLine("{0} beginnt...", firstPlayer.Name);
             Console.WriteLine("Press key to continue...");
             Console.ReadKey();
 
@@ -93,7 +76,7 @@ namespace Greed
                     }
             }
 
-            Console.WriteLine("Spieler {0} hat {1} Punkte.", players[0], points);
+            Console.WriteLine("Spieler {0} hat {1} Punkte.", firstPlayer.Name, points);
 
             foreach (var item in dices)
             {
@@ -183,6 +166,46 @@ namespace Greed
             }
 
             return players;
+        }
+
+        public static Player DeterminePlayerToStartGame(List<Player> players)
+        {
+            foreach (var item in players)
+            {
+                var eyes = Dice.GetEyes();
+                item.Eyes = eyes;
+            }
+
+            foreach (var item in players)
+            {
+                Console.WriteLine("{0,21} würfelte {1}", item.Name, item.Eyes);
+            }
+
+            int max = players.Max(x => x.Eyes);
+            Console.WriteLine("Höchster Wurf war {0}.", max);
+            Player firstPlayer = new Player();
+            List<Player> startPlayers = new List<Player>();
+            foreach (var item in players)
+            {
+                if (item.Eyes == max)
+                {
+                    startPlayers.Add(item);
+                    firstPlayer = item;
+                }
+            }
+
+            int indexOfStartPlayer = 0;
+            if (startPlayers.Count >= 2)
+            {
+                Console.WriteLine("Stechen...");
+                Console.WriteLine("Computer ermittelt den Startspieler zufällig...");
+                Random randomStartPlayer = new Random();
+                indexOfStartPlayer = randomStartPlayer.Next(0, startPlayers.Count);
+            }
+            else
+                return firstPlayer;
+
+            return firstPlayer = startPlayers[indexOfStartPlayer];
         }
 
         public static Dictionary<int, int> GetOccurenceOfEyes(List<int> list)
