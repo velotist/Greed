@@ -29,7 +29,7 @@ Kriterien:
 * wer die höchste Zahl beim Würfeln hat
 * Stechen, bei gleichen Würfeln
 Status:
-Offen
+Erledigt
 
 Titel:
 Würfelbecher schütteln

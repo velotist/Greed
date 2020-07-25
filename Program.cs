@@ -8,6 +8,12 @@ namespace Greed
     {
         static void Main(string[] args)
         {
+            if (args is null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
+            // Anzahl Spieler ermitteln
             Console.WriteLine("Welcome to Chicago");
             Console.WriteLine();
             Console.Write("How many players do you want to create? ");
@@ -15,6 +21,7 @@ namespace Greed
 
             Console.Clear();
 
+            // Spielernamen vergeben
             Console.WriteLine("Gib die Namen der Spieler ein...");
             Console.WriteLine();
             List<Player> players = Game.NamePlayers(numberOfPlayers);
@@ -31,57 +38,21 @@ namespace Greed
 
             Console.Clear();
 
-            int points = 0;
-            List<int> dices = new List<int>();
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    int diceEyes = Dice.GetEyes();
-            //    dices.Add(diceEyes);
-            //}
+            // Würfelbecher mit sechs Würfeln füllen
+            List<Dice> dices = Dice.FillDiceCupWithAllDices();
 
-            //Console.WriteLine("Spieler {0} würfelte", players);
-            //Console.WriteLine();
-            //foreach (var item in dices)
-            //{
-            //    Console.Write(item + "  ");
-            //}
-            //Console.WriteLine();
-
-            Dictionary<int, int> dict = Game.GetOccurenceOfEyes(dices);
-            foreach (var item in dict)
-            {
-                Console.WriteLine("Zahl: {0} Häufigkeit: {1}", item.Key, item.Value);
-                Console.WriteLine();
-                if (item.Key == 1)
-                {
-                    points += item.Value * 100;
-                    dices.RemoveAt(item.Key);
-                }
-                if (item.Key == 5)
-                {
-                    points += item.Value * 50;
-                    dices.Remove(item.Key);
-                }
-                if (item.Value == 3)
-                    if (item.Key > 1)
-                    {
-                        points = item.Key * 100;
-                        dices.Remove(item.Key);
-                    }
-                if (item.Value == 4)
-                    if (item.Key > 1)
-                    {
-                        points = item.Key * 1000;
-                        dices.Remove(item.Key);
-                    }
-            }
-
-            Console.WriteLine("Spieler {0} hat {1} Punkte.", firstPlayer.Name, points);
-
+            Console.WriteLine("Augenzahlen sind...");
             foreach (var item in dices)
             {
-                Console.WriteLine(item);
+                Console.Write("{0,2}", item.Eyes);
             }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Press key to continue...");
+            Console.ReadKey();
+
+            Game.GetPoints(dices);
 
             Console.ReadKey();
         }
@@ -96,12 +67,30 @@ namespace Greed
     class Dice
     {
         static Random random = new Random();
+        public int Eyes { get; set; }
+
+        private static int DiceOneDice()
+        {
+            return random.Next(1, 7);
+        }
 
         public static int GetEyes()
         {
             int eyes = random.Next(1, 7);
 
             return eyes;
+        }
+
+        public static List<Dice> FillDiceCupWithAllDices()
+        {
+            List<Dice> dices = new List<Dice>();
+
+            for (int i = 0; i < 6; i++)
+            {
+                dices.Add(new Dice() { Eyes = DiceOneDice() });
+            }
+
+            return dices;
         }
     }
 
@@ -182,7 +171,6 @@ namespace Greed
             }
 
             int max = players.Max(x => x.Eyes);
-            Console.WriteLine("Höchster Wurf war {0}.", max);
             Player firstPlayer = new Player();
             List<Player> startPlayers = new List<Player>();
             foreach (var item in players)
@@ -208,15 +196,18 @@ namespace Greed
             return firstPlayer = startPlayers[indexOfStartPlayer];
         }
 
-        public static Dictionary<int, int> GetOccurenceOfEyes(List<int> list)
+        public static int GetPoints(List<Dice> dices)
         {
-            list.Sort();
+            int points = 0;
+            Dictionary<int, Dice> toDict = dices.Select((s, i) => new { s, i })
+             .ToDictionary(x => x.i, x => x.s);
 
-            Dictionary<int, int> numbersOccurence = list
-                                        .GroupBy(item => item)
-                                        .ToDictionary(item => item.Key, item => item.Count());
+            foreach (var item in toDict)
+            {
+                Console.Write(item.Key + " " + item.Value.Eyes);
+            }
 
-            return numbersOccurence;
+            return points;
         }
     }
 }
