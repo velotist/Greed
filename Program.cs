@@ -33,23 +33,35 @@ namespace Greed
             firstPlayer = Game.DeterminePlayerToStartGame(players);
             Console.WriteLine();
             Console.WriteLine("{0} beginnt...", firstPlayer.Name);
-            
+
             ControlGame.AwaitKeyAndClearConsole();
 
             Console.Clear();
 
             // Würfelbecher mit sechs Würfeln füllen
-            List<Dice> dices = Dice.FillDiceCupWithAllDices();
+            int[] dices = Dice.FillDiceCupWithAllDices(6);
 
             Console.WriteLine("Augenzahlen sind...");
-            foreach (var item in dices)
+            foreach (var dice in dices)
             {
-                Console.Write("{0,2}", item.Eyes);
+                Console.Write("{0,2}", dice);
             }
 
             ControlGame.AwaitKeyAndClearConsole();
 
-            Game.GetPoints(dices);
+            int[,] occurrenceOfEyes = Game.FindOccurrenceOfEyes(dices);
+
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Write("Augenzahl: {0}   ", occurrenceOfEyes[i, 0]);
+                Console.WriteLine("Häufigkeit: {0}", occurrenceOfEyes[i, 1]);
+            }
+
+            Console.WriteLine("Du hast bis jetzt {0} Punkte.", Game.GetPoints(occurrenceOfEyes));
+            Console.Write("Willst Du weiterspielen (j/n)? ");
+            
+
+            Console.ReadKey();
 
             ControlGame.AwaitKeyAndClearConsole();
         }
@@ -59,6 +71,7 @@ namespace Greed
     {
         public string Name { get; set; }
         public int Eyes { get; set; }
+        public int Points { get; set; }
     }
 
     class Dice
@@ -66,25 +79,20 @@ namespace Greed
         static Random random = new Random();
         public int Eyes { get; set; }
 
-        private static int DiceOneDice()
-        {
-            return random.Next(1, 7);
-        }
-
-        public static int GetEyes()
+        public static int DiceEyes()
         {
             int eyes = random.Next(1, 7);
 
             return eyes;
         }
 
-        public static List<Dice> FillDiceCupWithAllDices()
+        public static int[] FillDiceCupWithAllDices(int amountOfDices)
         {
-            List<Dice> dices = new List<Dice>();
+            int[] dices = new int[amountOfDices];
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < amountOfDices; i++)
             {
-                dices.Add(new Dice() { Eyes = DiceOneDice() });
+                dices[i] = DiceEyes();
             }
 
             return dices;
@@ -169,7 +177,7 @@ namespace Greed
         {
             foreach (var item in players)
             {
-                var eyes = Dice.GetEyes();
+                var eyes = Dice.DiceEyes();
                 item.Eyes = eyes;
             }
 
@@ -204,15 +212,64 @@ namespace Greed
             return firstPlayer = startPlayers[indexOfStartPlayer];
         }
 
-        public static int GetPoints(List<Dice> dices)
+        public static int[,] FindOccurrenceOfEyes(int[] dices)
+        {
+            int[,] occurrences = new int[6, 2];
+
+            int numbersOccurrenceOf1 = dices.Count(s => s == 1);
+            int numbersOccurrenceOf2 = dices.Count(s => s == 2);
+            int numbersOccurrenceOf3 = dices.Count(s => s == 3);
+            int numbersOccurrenceOf4 = dices.Count(s => s == 4);
+            int numbersOccurrenceOf5 = dices.Count(s => s == 5);
+            int numbersOccurrenceOf6 = dices.Count(s => s == 6);
+            occurrences[0, 0] = 1;
+            occurrences[0, 1] = numbersOccurrenceOf1;
+            occurrences[1, 0] = 2;
+            occurrences[1, 1] = numbersOccurrenceOf2;
+            occurrences[2, 0] = 3;
+            occurrences[2, 1] = numbersOccurrenceOf3;
+            occurrences[3, 0] = 4;
+            occurrences[3, 1] = numbersOccurrenceOf4;
+            occurrences[4, 0] = 5;
+            occurrences[4, 1] = numbersOccurrenceOf5;
+            occurrences[5, 0] = 6;
+            occurrences[5, 1] = numbersOccurrenceOf6;
+
+            return occurrences;
+        }
+
+        public static int GetPoints(int[,] occurrenceOfEyes)
         {
             int points = 0;
-            Dictionary<int, Dice> toDict = dices.Select((s, i) => (s, i))
-                                                .ToDictionary(x => x.i, x => x.s);
 
-            foreach (var item in toDict)
+            // Punkte für Augenzahl 1
+            if (occurrenceOfEyes[0, 1] <= 2)
+                points += occurrenceOfEyes[0, 1] * 100;
+            // Punkte bei Dreierpasch für Augenzahl 1
+            if (occurrenceOfEyes[0, 1] == 3)
+                points += 1000;
+            // Punkte bei Viererpasch für Augenzahl 1
+            if (occurrenceOfEyes[0,1] == 4)
+                points += 10000;
+            // Punkte für Augenzahl 5
+            if (occurrenceOfEyes[4, 1] <= 2)
+                points += occurrenceOfEyes[4, 1] * 50;
+            // Punkte für eine Straße (1,2,3,4,5 oder 2,3,4,5,6)
+            if ((occurrenceOfEyes[0, 1] == 1 && occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1) ||
+                (occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1 && occurrenceOfEyes[5, 1] == 1))
+                points += 10000;
+
+            // Punkte für Dreier- und Viererpasch aller Augenzahlen außer Augenzahl 1
+            for (int i = 1; i < 6; i++)
             {
-                Console.Write(item.Key + " " + item.Value.Eyes + " ");
+                if (occurrenceOfEyes[i, 1] == 3)
+                {
+                    points += occurrenceOfEyes[i, 0] * 100;
+                }
+                if (occurrenceOfEyes[i, 1] == 4)
+                {
+                    points += occurrenceOfEyes[i, 0] * 1000;
+                }
             }
 
             return points;
