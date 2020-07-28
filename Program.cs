@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,9 +60,14 @@ namespace Greed
 
             Console.WriteLine("Du hast bis jetzt {0} Punkte.", Game.GetPoints(occurrenceOfEyes));
             Console.Write("Willst Du weiterspielen (j/n)? ");
-            
-
+            // wenn ja Methode aufrufen, um eine Liste mit den Augenzahlen, die keine Punkte bringen, anzulegen
             Console.ReadKey();
+
+            ArrayList listOfEyesWithoutPoints = Game.ReturnListOfEyesWithoutPoints(dices);
+            foreach (var item in listOfEyesWithoutPoints)
+            {
+                Console.WriteLine(item);
+            }
 
             ControlGame.AwaitKeyAndClearConsole();
         }
@@ -238,6 +244,21 @@ namespace Greed
             return occurrences;
         }
 
+        public static ArrayList ReturnListOfEyesWithoutPoints(int[] array)
+        {
+            ArrayList list = new ArrayList();
+
+            foreach (var item in array)
+            {
+                if (item != 1 && item != 5)
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
+
         public static int GetPoints(int[,] occurrenceOfEyes)
         {
             int points = 0;
@@ -249,7 +270,7 @@ namespace Greed
             if (occurrenceOfEyes[0, 1] == 3)
                 points += 1000;
             // Punkte bei Viererpasch für Augenzahl 1
-            if (occurrenceOfEyes[0,1] == 4)
+            if (occurrenceOfEyes[0, 1] == 4)
                 points += 10000;
             // Punkte für Augenzahl 5
             if (occurrenceOfEyes[4, 1] <= 2)
