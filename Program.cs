@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,54 +17,66 @@ namespace Greed
             // Anzahl Spieler ermitteln
             Console.WriteLine("Welcome to Chicago");
             Console.WriteLine();
-            Console.Write("How many players do you want to create? ");
+            Console.WriteLine("How many players do you want to create? ");
             int numberOfPlayers = Game.GetNumberOfPlayers();
 
             Console.Clear();
 
             // Spielernamen vergeben
-            Console.WriteLine("Gib die Namen der Spieler ein...");
+            Console.WriteLine("Name the players now...");
             Console.WriteLine();
             List<Player> players = Game.NamePlayers(numberOfPlayers);
 
             Console.Clear();
 
             // Startspieler ermitteln
-            Player firstPlayer;
-            firstPlayer = Game.DeterminePlayerToStartGame(players);
+            Player player;
+            player = Game.DeterminePlayerToStartGame(players);
+            int playerIndexInListOfPlayers = players.IndexOf(player);
+            Console.WriteLine("Index des Spielers in der Liste: {0}", playerIndexInListOfPlayers);
             Console.WriteLine();
-            Console.WriteLine("{0} beginnt...", firstPlayer.Name);
+            Console.WriteLine("{0} starts...", player.Name);
 
             ControlGame.AwaitKeyAndClearConsole();
 
-            Console.Clear();
-
-            // Würfelbecher mit sechs Würfeln füllen
-            int[] dices = Dice.FillDiceCupWithAllDices(6);
-
-            Console.WriteLine("Augenzahlen sind...");
-            foreach (var dice in dices)
+            // Spiele Spiel bis einer der Spieler mehr als 10000 Punkte hat
+            do
             {
-                Console.Write("{0,2}", dice);
-            }
+                // Würfelbecher mit sechs Würfeln füllen
+                int[] dices = Dice.FillDiceCupWithAllDices(6);
+                ArrayList collectedDices = new ArrayList();
+                Console.WriteLine("Eyes are...");
+                foreach (var dice in dices)
+                {
+                    Console.Write("{0,2}", dice);
+                }
 
-            ControlGame.AwaitKeyAndClearConsole();
+                ControlGame.AwaitKeyAndClearConsole();
 
-            int[,] occurrenceOfEyes = Game.FindOccurrenceOfEyes(dices);
+                // Speichere Häufigkeit einer Augenzahl
+                int[,] occurrenceOfEyes = Game.FindOccurrenceOfEyes(dices);
 
-            for (int i = 0; i < 6; i++)
-            {
-                Console.Write("Augenzahl: {0}   ", occurrenceOfEyes[i, 0]);
-                Console.WriteLine("Häufigkeit: {0}", occurrenceOfEyes[i, 1]);
-            }
+                //for (int i = 0; i < 6; i++)
+                //{
+                //    Console.Write("Eyes: {0}   ", occurrenceOfEyes[i, 0]);
+                //    Console.WriteLine("Occurrence: {0}", occurrenceOfEyes[i, 1]);
+                //}
 
-            Console.WriteLine("Du hast bis jetzt {0} Punkte.", Game.GetPoints(occurrenceOfEyes));
-            Console.Write("Willst Du weiterspielen (j/n)? ");
-            
+                Console.WriteLine();
+                Console.WriteLine("You now have {0} points.", Game.GetPoints(occurrenceOfEyes));
+                Console.WriteLine();
 
-            Console.ReadKey();
+                ControlGame.AwaitKeyAndClearConsole();
 
-            ControlGame.AwaitKeyAndClearConsole();
+                Console.Write("Continue playing (y/n)? ");
+                if (Console.ReadLine().Equals("y") || Console.ReadLine().Equals("Y"))
+                    Console.WriteLine("Play on...");
+                else
+                {
+                    Console.WriteLine("Check if points same or higher 10.000");
+                    Console.WriteLine("Next player...");
+                }
+            } while (player.Points <= 10000);
         }
     }
 
@@ -118,7 +131,8 @@ namespace Greed
 
             do
             {
-                Console.Write("Bitte Spieleranzahl eingeben (min 2 / max 5): ");
+                Console.WriteLine();
+                Console.Write("...give in a number of 2 to 5 players, please: ");
                 _ = int.TryParse(Console.ReadLine(), out numberOfPlayers);
             } while (numberOfPlayers < 2 || numberOfPlayers > 5);
 
@@ -136,12 +150,12 @@ namespace Greed
 
                 do
                 {
-                    Console.Write("Name des Spielers {0}: ", i + 1);
+                    Console.Write("Name of player {0}: ", i + 1);
                     name = Console.ReadLine();
                     if (name.Length < 2 || name.Length > 20)
                     {
                         isLengthOkay = false;
-                        Console.WriteLine("Bitte zwischen 2 und 20 Zeichen verwenden.");
+                        Console.WriteLine("...please fill in between 2 to 20 characters.");
                         Console.WriteLine();
                     }
                     else
@@ -158,7 +172,7 @@ namespace Greed
                         else
                         {
                             isNameUnique = false;
-                            Console.WriteLine("Name bereits vergeben. Bitte anderen Namen angeben.");
+                            Console.WriteLine("Name already exists. Please chosse another name.");
                             Console.WriteLine();
                             break;
                         }
@@ -183,7 +197,7 @@ namespace Greed
 
             foreach (var item in players)
             {
-                Console.WriteLine("{0,21} würfelte {1}", item.Name, item.Eyes);
+                Console.WriteLine("{0,21} dices {1}", item.Name, item.Eyes);
             }
 
             int max = players.Max(x => x.Eyes);
@@ -201,8 +215,8 @@ namespace Greed
             int indexOfStartPlayer = 0;
             if (startPlayers.Count >= 2)
             {
-                Console.WriteLine("Stechen...");
-                Console.WriteLine("Computer ermittelt den Startspieler zufällig...");
+                Console.WriteLine("Stitch...");
+                Console.WriteLine("Computer determines the starting player randomly...");
                 Random randomStartPlayer = new Random();
                 indexOfStartPlayer = randomStartPlayer.Next(0, startPlayers.Count);
             }
@@ -223,7 +237,7 @@ namespace Greed
             int numbersOccurrenceOf5 = dices.Count(s => s == 5);
             int numbersOccurrenceOf6 = dices.Count(s => s == 6);
             occurrences[0, 0] = 1;
-            occurrences[0, 1] = numbersOccurrenceOf1;
+            occurrences[0, 1] = numbersOccurrenceOf1; // Häufigkeit der Einsen
             occurrences[1, 0] = 2;
             occurrences[1, 1] = numbersOccurrenceOf2;
             occurrences[2, 0] = 3;
@@ -238,6 +252,18 @@ namespace Greed
             return occurrences;
         }
 
+        public static List<int> Convert2DArrayToList(int[,] array)
+        {
+            List<int> list = new List<int>();
+
+            foreach (var item in array)
+            {
+                list.Add(item);
+            }
+
+            return list;
+        }
+
         public static int GetPoints(int[,] occurrenceOfEyes)
         {
             int points = 0;
@@ -249,7 +275,7 @@ namespace Greed
             if (occurrenceOfEyes[0, 1] == 3)
                 points += 1000;
             // Punkte bei Viererpasch für Augenzahl 1
-            if (occurrenceOfEyes[0,1] == 4)
+            if (occurrenceOfEyes[0, 1] == 4)
                 points += 10000;
             // Punkte für Augenzahl 5
             if (occurrenceOfEyes[4, 1] <= 2)
