@@ -9,7 +9,7 @@ namespace Greed
 {
     class Game
     {
-        public static int GetNumberOfPlayers()
+        public int GetNumberOfPlayers()
         {
             int numberOfPlayers;
 
@@ -23,7 +23,7 @@ namespace Greed
             return numberOfPlayers;
         }
 
-        public static List<Player> NamePlayers(int numberOfPlayers)
+        public List<Player> NamePlayers(int numberOfPlayers)
         {
             List<Player> players = new List<Player>();
             Player player = new Player();
@@ -71,11 +71,12 @@ namespace Greed
             return players;
         }
 
-        public static Player DeterminePlayerToStartGame(List<Player> players)
+        public Player DeterminePlayerToStartGame(List<Player> players)
         {
+            Random random = new Random();
             foreach (var item in players)
             {
-                var eyes = Dice.DiceEyes();
+                var eyes = random.Next(1, 7);
                 item.Eyes = eyes;
             }
 
@@ -110,7 +111,7 @@ namespace Greed
             return firstPlayer = startPlayers[indexOfStartPlayer];
         }
 
-        public static int[,] FindOccurrenceOfEyes(int[] dices)
+        public int[,] FindOccurrenceOfEyes(int[] dices)
         {
             int[,] occurrences = new int[6, 2];
 
@@ -136,7 +137,7 @@ namespace Greed
             return occurrences;
         }
 
-        public static List<int> Convert2DArrayToList(int[,] array)
+        private List<int> Convert2DArrayToList(int[,] array)
         {
             List<int> list = new List<int>();
 
@@ -148,7 +149,7 @@ namespace Greed
             return list;
         }
 
-        public static int GetPoints(int[,] occurrenceOfEyes)
+        public int GetPoints(int[,] occurrenceOfEyes)
         {
             int points = 0;
 
@@ -185,7 +186,7 @@ namespace Greed
             return points;
         }
 
-        public static int CheckDicesWithoutPoints(int[] dices)
+        private int CheckDicesWithoutPoints(int[] dices)
         {
             List<int> listWithDices = dices.ToList();
             int newDicesToRoll = 0;
@@ -203,6 +204,31 @@ namespace Greed
             }
 
             return newDicesToRoll;
+        }
+
+        public void ShowPoints(List<Player> players)
+        {
+            Console.Clear();
+            foreach (var item in players)
+            {
+                Console.WriteLine("Spieler: {0} Punkte: {1}", item.Name, item.Points);
+            }
+            Console.WriteLine();
+        }
+
+        public Player CheckForNextPlayer(List<Player> players, int playerIndexInListOfPlayers)
+        {
+            Player player;
+
+            if (playerIndexInListOfPlayers >= (players.Count - 1))
+            {
+                playerIndexInListOfPlayers = 0;
+            }
+
+            player = players[++playerIndexInListOfPlayers];
+            Console.WriteLine("Next player is {0}", player.Name);
+
+            return player;
         }
     }
 }
