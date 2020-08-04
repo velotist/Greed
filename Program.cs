@@ -13,26 +13,28 @@ namespace Greed
                 throw new ArgumentNullException(nameof(args));
             }
 
+            Game zehntausend = new Game();
+            Dice diceCup = new Dice();
+
             // Anzahl Spieler ermitteln
             Console.WriteLine("Welcome to Chicago");
             Console.WriteLine();
             Console.WriteLine("How many players do you want to create? ");
-            int numberOfPlayers = Game.GetNumberOfPlayers();
+            int numberOfPlayers = zehntausend.GetNumberOfPlayers();
 
             Console.Clear();
 
             // Spielernamen vergeben
             Console.WriteLine("Name the players now...");
             Console.WriteLine();
-            List<Player> players = Game.NamePlayers(numberOfPlayers);
+            List<Player> players = zehntausend.NamePlayers(numberOfPlayers);
 
             Console.Clear();
 
             // Startspieler ermitteln
             Player player;
-            player = Game.DeterminePlayerToStartGame(players);
+            player = zehntausend.DeterminePlayerToStartGame(players);
             int playerIndexInListOfPlayers = players.IndexOf(player);
-            Console.WriteLine("Index des Spielers in der Liste: {0}", playerIndexInListOfPlayers);
             Console.WriteLine();
             Console.WriteLine("{0} starts...", player.Name);
 
@@ -42,36 +44,34 @@ namespace Greed
             int points = 0;
             do
             {
+                zehntausend.ShowPoints(players);
                 // Würfelbecher mit sechs Würfeln füllen
-                int[] dices = Dice.FillDiceCupWithDices(6);
+                int[] dices = diceCup.FillDiceCupWithDices(6);
                 ArrayList collectedDices = new ArrayList();
-                Console.WriteLine("Eyes are...");
+                Console.Write("Eyes are: ");
                 foreach (var dice in dices)
                 {
-                    Console.Write("{0,2}", dice);
+                    Console.Write("{0,3}", dice);
                 }
 
-                UserInteraction.AwaitKeyAndClearConsole();
-
                 // Speichere Häufigkeit einer Augenzahl
-                int[,] occurrenceOfEyes = Game.FindOccurrenceOfEyes(dices);
+                int[,] occurrenceOfEyes = zehntausend.FindOccurrenceOfEyes(dices);
 
-                // Gebe die Liste der Augenzahlen mit deren Häufigkeit aus
-                //for (int i = 0; i < 6; i++)
-                //{
-                //    Console.Write("Eyes: {0}   ", occurrenceOfEyes[i, 0]);
-                //    Console.WriteLine("Occurrence: {0}", occurrenceOfEyes[i, 1]);
-                //}
-
+                // Berechne Punkte
                 Console.WriteLine();
-                points = Game.GetPoints(occurrenceOfEyes);
-                Console.WriteLine("You now have {0} points.", points);
+                Console.WriteLine();
+                points = zehntausend.GetPoints(occurrenceOfEyes);
+                Console.WriteLine("You now have {0} points, {1}", points, player.Name);
                 Console.WriteLine();
 
-                UserInteraction.AwaitKeyAndClearConsole();
+                if(points==0)
+                {
+                    zehntausend.CheckForNextPlayer(players, playerIndexInListOfPlayers);
+                    break;
+                }
 
                 Console.Write("Continue playing (y/n)? ");
-                if (Console.ReadLine().Equals("y") || Console.ReadLine().Equals("Y"))
+                if (Console.ReadKey().Equals("y") || Console.ReadKey().Equals("Y"))
                 {
                     Console.WriteLine("Play on...");
                     player.Points = points;
@@ -82,6 +82,7 @@ namespace Greed
                 {
                     if (points >= 10000)
                     {
+                        zehntausend.ShowPoints(players);
                         Console.Clear();
                         Console.WriteLine("And the winner is...");
                         Console.WriteLine();
@@ -95,10 +96,7 @@ namespace Greed
                         Environment.Exit(0);
                     }
 
-                    if (playerIndexInListOfPlayers > players.Count)
-                        playerIndexInListOfPlayers = -1;
-                    player = players[playerIndexInListOfPlayers++];
-                    Console.WriteLine("Next player is {0}", player.Name);
+                    player = zehntausend.CheckForNextPlayer(players, playerIndexInListOfPlayers);
                 }
             } while (player.Points <= 10000);
         }

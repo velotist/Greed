@@ -8,17 +8,17 @@ namespace Greed
 {
     class Dice
     {
-        static Random random = new Random();
+        private Random random = new Random();
         public int Eyes { get; set; }
 
-        public static int DiceEyes()
+        private int DiceEyes()
         {
             int eyes = random.Next(1, 7);
 
             return eyes;
         }
 
-        public static int[] FillDiceCupWithDices(int amountOfDices)
+        public int[] FillDiceCupWithDices(int amountOfDices)
         {
             int[] dices = new int[amountOfDices];
 

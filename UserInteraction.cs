@@ -14,6 +14,7 @@ namespace Greed
             Console.WriteLine();
             Console.WriteLine("Press key to continue...");
             Console.ReadKey();
+            Console.Clear();
         }
     }
 }
