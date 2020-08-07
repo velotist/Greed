@@ -9,6 +9,8 @@ namespace Greed
 {
     class Game
     {
+        public List<Player> players = new List<Player>();
+
         public int GetNumberOfPlayers()
         {
             int numberOfPlayers;
@@ -25,7 +27,7 @@ namespace Greed
 
         public List<Player> NamePlayers(int numberOfPlayers)
         {
-            List<Player> players = new List<Player>();
+            //List<Player> players = new List<Player>();
             Player player = new Player();
             string name;
             for (int i = 0; i < numberOfPlayers; i++)
@@ -216,19 +218,44 @@ namespace Greed
             Console.WriteLine();
         }
 
+        public int GetPlayerIndex(int playerIndexInListOfPlayers)
+        {
+            if (playerIndexInListOfPlayers >= (players.Count - 1))
+            {
+                return 0;
+            }
+
+            playerIndexInListOfPlayers++;
+
+            return playerIndexInListOfPlayers;
+        }
+
         public Player CheckForNextPlayer(List<Player> players, int playerIndexInListOfPlayers)
         {
             Player player;
 
-            if (playerIndexInListOfPlayers >= (players.Count - 1))
-            {
-                playerIndexInListOfPlayers = 0;
-            }
-
-            player = players[++playerIndexInListOfPlayers];
+            player = players[GetPlayerIndex(playerIndexInListOfPlayers)];
             Console.WriteLine("Next player is {0}", player.Name);
 
             return player;
+        }
+
+        public void CheckTenThousandPoints(Player player)
+        {
+            
+                ShowPoints(players);
+                Console.Clear();
+                Console.WriteLine("And the winner is...");
+                Console.WriteLine();
+                Console.WriteLine("***********   {0}    ************", player.Name);
+                Console.WriteLine();
+                Console.WriteLine("With {0} points.", player.Points);
+                Console.WriteLine();
+
+                UserInteraction.AwaitKeyAndClearConsole("Press any key to continue...");
+
+                Environment.Exit(0);
+            
         }
     }
 }

@@ -38,12 +38,15 @@ namespace Greed
             Console.WriteLine();
             Console.WriteLine("{0} starts...", player.Name);
 
-            UserInteraction.AwaitKeyAndClearConsole();
+            UserInteraction.AwaitKeyAndClearConsole("Press any key to continue...");
 
             // Spiele Spiel bis einer der Spieler mehr als 10000 Punkte hat
-            int points = 0;
+            int points;
+            int totalPoints;
             do
             {
+                points = 0;
+                totalPoints = 0;
                 zehntausend.ShowPoints(players);
                 // Würfelbecher mit sechs Würfeln füllen
                 int[] dices = diceCup.FillDiceCupWithDices(6);
@@ -60,43 +63,40 @@ namespace Greed
                 // Berechne Punkte
                 Console.WriteLine();
                 Console.WriteLine();
-                points = zehntausend.GetPoints(occurrenceOfEyes);
+                points += zehntausend.GetPoints(occurrenceOfEyes);
                 Console.WriteLine("You now have {0} points, {1}", points, player.Name);
+                totalPoints += points;
                 Console.WriteLine();
 
-                if(points==0)
+                if (points == 0)
                 {
-                    zehntausend.CheckForNextPlayer(players, playerIndexInListOfPlayers);
-                    break;
+                    player.Points += totalPoints;
+                    playerIndexInListOfPlayers = zehntausend.GetPlayerIndex(playerIndexInListOfPlayers);
+                    player = players[playerIndexInListOfPlayers];
+                    UserInteraction.AwaitKeyAndClearConsole("Press key...");
+                    continue;
                 }
-
-                Console.Write("Continue playing (y/n)? ");
-                if (Console.ReadKey().Equals("y") || Console.ReadKey().Equals("Y"))
+                else if (totalPoints >= 10000)
                 {
-                    Console.WriteLine("Play on...");
-                    player.Points = points;
-
-                    Environment.Exit(0);
+                    player.Points = totalPoints;
+                    zehntausend.CheckTenThousandPoints(player);
                 }
                 else
                 {
-                    if (points >= 10000)
+                    Console.Write("Continue playing (y/n)? ");
+                    if (Console.ReadKey().Key == ConsoleKey.Y)
                     {
-                        zehntausend.ShowPoints(players);
-                        Console.Clear();
-                        Console.WriteLine("And the winner is...");
-                        Console.WriteLine();
-                        Console.WriteLine("***********   {0}    ************", player.Name);
-                        Console.WriteLine();
-                        Console.WriteLine("With {0} points.", points);
-                        Console.WriteLine();
-
-                        UserInteraction.AwaitKeyAndClearConsole();
+                        totalPoints -= points;
+                        UserInteraction.AwaitKeyAndClearConsole("Play on...");
 
                         Environment.Exit(0);
                     }
-
-                    player = zehntausend.CheckForNextPlayer(players, playerIndexInListOfPlayers);
+                    else
+                    {
+                        player.Points += totalPoints;
+                        playerIndexInListOfPlayers = zehntausend.GetPlayerIndex(playerIndexInListOfPlayers);
+                        player = players[playerIndexInListOfPlayers];
+                    }
                 }
             } while (player.Points <= 10000);
         }
