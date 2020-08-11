@@ -145,18 +145,6 @@ namespace Greed
             return occurrences;
         }
 
-        private List<int> Convert2DArrayToList(int[,] array)
-        {
-            List<int> list = new List<int>();
-
-            foreach (var item in array)
-            {
-                list.Add(item);
-            }
-
-            return list;
-        }
-
         public int GetPoints(int[,] occurrenceOfEyes)
         {
             int points = 0;
@@ -212,26 +200,6 @@ namespace Greed
                 DicesWithPoints = 6;
 
             return points;
-        }
-
-        private int CheckDicesWithoutPoints(int[] dices)
-        {
-            List<int> listWithDices = dices.ToList();
-            int newDicesToRoll = 0;
-            ArrayList severalTimesEye = new ArrayList();
-
-            for (int i = 1; i < 7; i++)
-            {
-                for (int j = 0; j < listWithDices.Count; j++)
-                {
-                    if (i == dices[j])
-                    {
-                        severalTimesEye.Add(Array.IndexOf(dices, i));
-                    }
-                }
-            }
-
-            return newDicesToRoll;
         }
 
         public void ShowPoints(List<Player> players)
