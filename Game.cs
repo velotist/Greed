@@ -10,6 +10,12 @@ namespace Greed
     class Game
     {
         public List<Player> players = new List<Player>();
+        public int DicesWithPoints { get; private set; }
+
+        public Game()
+        {
+            DicesWithPoints = 6;
+        }
 
         public int GetNumberOfPlayers()
         {
@@ -157,20 +163,35 @@ namespace Greed
 
             // Punkte für Augenzahl 1
             if (occurrenceOfEyes[0, 1] <= 2)
+            {
                 points += occurrenceOfEyes[0, 1] * 100;
+                DicesWithPoints -= occurrenceOfEyes[0, 1];
+            }
             // Punkte bei Dreierpasch für Augenzahl 1
             if (occurrenceOfEyes[0, 1] == 3)
+            {
                 points += 1000;
+                DicesWithPoints -= 3;
+            }
             // Punkte bei Viererpasch für Augenzahl 1
             if (occurrenceOfEyes[0, 1] == 4)
+            {
                 points += 10000;
+                DicesWithPoints -= 4;
+            }
             // Punkte für Augenzahl 5
             if (occurrenceOfEyes[4, 1] <= 2)
+            {
                 points += occurrenceOfEyes[4, 1] * 50;
+                DicesWithPoints -= occurrenceOfEyes[4, 1];
+            }
             // Punkte für eine Straße (1,2,3,4,5 oder 2,3,4,5,6)
             if ((occurrenceOfEyes[0, 1] == 1 && occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1) ||
                 (occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1 && occurrenceOfEyes[5, 1] == 1))
+            {
                 points += 10000;
+                DicesWithPoints -= 5;
+            }
 
             // Punkte für Dreier- und Viererpasch aller Augenzahlen außer Augenzahl 1
             for (int i = 1; i < 6; i++)
@@ -178,12 +199,17 @@ namespace Greed
                 if (occurrenceOfEyes[i, 1] == 3)
                 {
                     points += occurrenceOfEyes[i, 0] * 100;
+                    DicesWithPoints -= 3;
                 }
                 if (occurrenceOfEyes[i, 1] == 4)
                 {
                     points += occurrenceOfEyes[i, 0] * 1000;
+                    DicesWithPoints -= 4;
                 }
             }
+
+            if (DicesWithPoints == 0)
+                DicesWithPoints = 6;
 
             return points;
         }
@@ -242,20 +268,20 @@ namespace Greed
 
         public void CheckTenThousandPoints(Player player)
         {
-            
-                ShowPoints(players);
-                Console.Clear();
-                Console.WriteLine("And the winner is...");
-                Console.WriteLine();
-                Console.WriteLine("***********   {0}    ************", player.Name);
-                Console.WriteLine();
-                Console.WriteLine("With {0} points.", player.Points);
-                Console.WriteLine();
 
-                UserInteraction.AwaitKeyAndClearConsole("Press any key to continue...");
+            ShowPoints(players);
+            Console.Clear();
+            Console.WriteLine("And the winner is...");
+            Console.WriteLine();
+            Console.WriteLine("***********   {0}    ************", player.Name);
+            Console.WriteLine();
+            Console.WriteLine("With {0} points.", player.Points);
+            Console.WriteLine();
 
-                Environment.Exit(0);
-            
+            UserInteraction.AwaitKeyAndClearConsole("Press any key to continue...");
+
+            Environment.Exit(0);
+
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Greed
                 totalPoints = 0;
                 zehntausend.ShowPoints(players);
                 // Würfelbecher mit sechs Würfeln füllen
-                int[] dices = diceCup.FillDiceCupWithDices(6);
+                int[] dices = diceCup.FillDiceCupWithDices(zehntausend.DicesWithPoints);
                 ArrayList collectedDices = new ArrayList();
                 Console.Write("Eyes are: ");
                 foreach (var dice in dices)
@@ -87,9 +87,11 @@ namespace Greed
                     if (Console.ReadKey().Key == ConsoleKey.Y)
                     {
                         totalPoints -= points;
+                        Console.WriteLine();
+                        Console.WriteLine("Würfelanzahl ohne Punkte {0}", zehntausend.DicesWithPoints);
                         UserInteraction.AwaitKeyAndClearConsole("Play on...");
 
-                        Environment.Exit(0);
+                        continue;
                     }
                     else
                     {
