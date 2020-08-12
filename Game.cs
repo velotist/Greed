@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Greed
 {
-    class Game
+    public class Game
     {
         public List<Player> players = new List<Player>();
-        public int DicesWithPoints { get; private set; }
+        public int DicesWithPoints { get; set; }
+        public int NumberOfPlayers { get; private set; }
 
         public Game()
         {
@@ -27,8 +28,9 @@ namespace Greed
                 Console.Write("...give in a number of 2 to 5 players, please: ");
                 _ = int.TryParse(Console.ReadLine(), out numberOfPlayers);
             } while (numberOfPlayers < 2 || numberOfPlayers > 5);
+            NumberOfPlayers = numberOfPlayers;
 
-            return numberOfPlayers;
+            return NumberOfPlayers;
         }
 
         public List<Player> NamePlayers(int numberOfPlayers)
@@ -189,10 +191,16 @@ namespace Greed
                     points += occurrenceOfEyes[i, 0] * 100;
                     DicesWithPoints -= 3;
                 }
-                if (occurrenceOfEyes[i, 1] == 4)
+                
+                if (occurrenceOfEyes[i, 1] == 4 || occurrenceOfEyes[i, 1] == 5)
                 {
                     points += occurrenceOfEyes[i, 0] * 1000;
                     DicesWithPoints -= 4;
+                }
+                if (occurrenceOfEyes[i, 1] == 6)
+                {
+                    points += occurrenceOfEyes[i, 0] * 100;
+                    DicesWithPoints -= 6;
                 }
             }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Greed
 {
-    class Dice
+    public class Dice
     {
         private Random random = new Random();
         public int Eyes { get; set; }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Greed
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -50,7 +50,6 @@ namespace Greed
                 zehntausend.ShowPoints(players);
                 // Würfelbecher mit sechs Würfeln füllen
                 int[] dices = diceCup.FillDiceCupWithDices(zehntausend.DicesWithPoints);
-                ArrayList collectedDices = new ArrayList();
                 Console.Write("Eyes are: ");
                 foreach (var dice in dices)
                 {
@@ -88,13 +87,13 @@ namespace Greed
                     {
                         totalPoints -= points;
                         Console.WriteLine();
-                        Console.WriteLine("Würfelanzahl ohne Punkte {0}", zehntausend.DicesWithPoints);
                         UserInteraction.AwaitKeyAndClearConsole("Play on...");
 
                         continue;
                     }
                     else
                     {
+                        zehntausend.DicesWithPoints = 6;
                         player.Points += totalPoints;
                         playerIndexInListOfPlayers = zehntausend.GetPlayerIndex(playerIndexInListOfPlayers);
                         player = players[playerIndexInListOfPlayers];
