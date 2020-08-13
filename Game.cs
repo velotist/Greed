@@ -11,7 +11,7 @@ namespace Greed
     {
         public List<Player> players = new List<Player>();
         public int DicesWithPoints { get; set; }
-        public int NumberOfPlayers { get; private set; }
+        public int NumberOfPlayers { get; set; }
 
         public Game()
         {
