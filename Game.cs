@@ -10,12 +10,12 @@ namespace Greed
     public class Game
     {
         public List<Player> players = new List<Player>();
-        public int DicesWithPoints { get; set; }
+        public int Dices { get; set; }
         public int NumberOfPlayers { get; set; }
 
         public Game()
         {
-            DicesWithPoints = 6;
+            Dices = 6;
         }
 
         public int GetNumberOfPlayers()
@@ -155,32 +155,32 @@ namespace Greed
             if (occurrenceOfEyes[0, 1] <= 2)
             {
                 points += occurrenceOfEyes[0, 1] * 100;
-                DicesWithPoints -= occurrenceOfEyes[0, 1];
+                Dices -= occurrenceOfEyes[0, 1];
             }
             // Punkte bei Dreierpasch für Augenzahl 1
             if (occurrenceOfEyes[0, 1] == 3)
             {
                 points += 1000;
-                DicesWithPoints -= 3;
+                Dices -= 3;
             }
             // Punkte bei Viererpasch für Augenzahl 1
             if (occurrenceOfEyes[0, 1] == 4)
             {
                 points += 10000;
-                DicesWithPoints -= 4;
+                Dices -= 4;
             }
             // Punkte für Augenzahl 5
             if (occurrenceOfEyes[4, 1] <= 2)
             {
                 points += occurrenceOfEyes[4, 1] * 50;
-                DicesWithPoints -= occurrenceOfEyes[4, 1];
+                Dices -= occurrenceOfEyes[4, 1];
             }
             // Punkte für eine Straße (1,2,3,4,5 oder 2,3,4,5,6)
             if ((occurrenceOfEyes[0, 1] == 1 && occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1) ||
                 (occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1 && occurrenceOfEyes[5, 1] == 1))
             {
                 points += 10000;
-                DicesWithPoints -= 5;
+                Dices -= 5;
             }
 
             // Punkte für Dreier- und Viererpasch aller Augenzahlen außer Augenzahl 1
@@ -189,23 +189,23 @@ namespace Greed
                 if (occurrenceOfEyes[i, 1] == 3)
                 {
                     points += occurrenceOfEyes[i, 0] * 100;
-                    DicesWithPoints -= 3;
+                    Dices -= 3;
                 }
                 
                 if (occurrenceOfEyes[i, 1] == 4 || occurrenceOfEyes[i, 1] == 5)
                 {
                     points += occurrenceOfEyes[i, 0] * 1000;
-                    DicesWithPoints -= 4;
+                    Dices -= 4;
                 }
                 if (occurrenceOfEyes[i, 1] == 6)
                 {
                     points += occurrenceOfEyes[i, 0] * 100;
-                    DicesWithPoints -= 6;
+                    Dices -= 6;
                 }
             }
 
-            if (DicesWithPoints == 0)
-                DicesWithPoints = 6;
+            if (Dices == 0)
+                Dices = 6;
 
             return points;
         }
@@ -246,7 +246,7 @@ namespace Greed
         {
 
             ShowPoints(players);
-            Console.Clear();
+            Console.WriteLine();
             Console.WriteLine("And the winner is...");
             Console.WriteLine();
             Console.WriteLine("***********   {0}    ************", player.Name);

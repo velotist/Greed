@@ -42,14 +42,24 @@ namespace Greed
 
             // Spiele Spiel bis einer der Spieler mehr als 10000 Punkte hat
             int points;
-            int totalPoints;
+            int totalPoints = 0;
+            bool playAgain = false;
+
             do
             {
-                points = 0;
-                totalPoints = 0;
+                if (playAgain)
+                {
+                    points = 0;
+                    totalPoints += points;
+                }
+                else
+                {
+                    points = 0;
+                    totalPoints = 0;
+                }
                 zehntausend.ShowPoints(players);
                 // Würfelbecher mit sechs Würfeln füllen
-                int[] dices = diceCup.FillDiceCupWithDices(zehntausend.DicesWithPoints);
+                int[] dices = diceCup.FillDiceCupWithDices(zehntausend.Dices);
                 Console.Write("Eyes are: ");
                 foreach (var dice in dices)
                 {
@@ -63,37 +73,48 @@ namespace Greed
                 Console.WriteLine();
                 Console.WriteLine();
                 points += zehntausend.GetPoints(occurrenceOfEyes);
-                Console.WriteLine("You now have {0} points, {1}", points, player.Name);
-                totalPoints += points;
-                Console.WriteLine();
-
                 if (points == 0)
                 {
-                    player.Points += totalPoints;
+                    playAgain = false;
+                    zehntausend.Dices = 6;
+                    player.Points += 0;
                     playerIndexInListOfPlayers = zehntausend.GetPlayerIndex(playerIndexInListOfPlayers);
                     player = players[playerIndexInListOfPlayers];
+
                     UserInteraction.AwaitKeyAndClearConsole("Press key...");
+
                     continue;
                 }
-                else if (totalPoints >= 10000)
+                totalPoints += points;
+
+                // wenn weitere Runde des gleichen Spielers
+                if (playAgain)
+                    Console.WriteLine("You now have {0} points, {1}", totalPoints, player.Name);
+                else
+                    Console.WriteLine("You have {0} points, {1}", points, player.Name);
+                Console.WriteLine();
+
+                
+                if (totalPoints >= 10000)
                 {
+                    Console.Write("Press key...");
+                    Console.ReadKey();
                     player.Points = totalPoints;
                     zehntausend.CheckTenThousandPoints(player);
                 }
-                else
+                else if(zehntausend.Dices > 0)
                 {
                     Console.Write("Continue playing (y/n)? ");
                     if (Console.ReadKey().Key == ConsoleKey.Y)
                     {
-                        totalPoints -= points;
-                        Console.WriteLine();
-                        UserInteraction.AwaitKeyAndClearConsole("Play on...");
+                        playAgain = true;
 
                         continue;
                     }
                     else
                     {
-                        zehntausend.DicesWithPoints = 6;
+                        playAgain = false;
+                        zehntausend.Dices = 6;
                         player.Points += totalPoints;
                         playerIndexInListOfPlayers = zehntausend.GetPlayerIndex(playerIndexInListOfPlayers);
                         player = players[playerIndexInListOfPlayers];
