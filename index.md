@@ -1,3 +1,5 @@
+![Image of Spi logo](https://ITsmus.de/wp-content/uploads/New_Logo_Spi_Inverted_Small_50.png)
+
 Review my code
 
 Help finding other algorithms
