@@ -58,9 +58,9 @@ namespace Greed
                     totalPoints = 0;
                 }
                 zehntausend.ShowPoints(players);
+                Console.Write("Player {0} diced...", player.Name);
                 // Würfelbecher mit sechs Würfeln füllen
                 int[] dices = diceCup.FillDiceCupWithDices(zehntausend.Dices);
-                Console.Write("Eyes are: ");
                 foreach (var dice in dices)
                 {
                     Console.Write("{0,3}", dice);
