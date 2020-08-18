@@ -213,7 +213,7 @@ namespace Greed
             Console.Clear();
             foreach (var item in players)
             {
-                Console.WriteLine("Spieler: {0} Punkte: {1}", item.Name, item.Points);
+                Console.WriteLine(String.Format("Spieler: {0,-22} Punkte: {1,-5:D5}", item.Name, item.Points));
             }
             Console.WriteLine();
         }
@@ -240,7 +240,7 @@ namespace Greed
             return player;
         }
 
-        public void CheckTenThousandPoints(Player player)
+        public void WinningGame(Player player)
         {
 
             ShowPoints(players);

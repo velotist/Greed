@@ -100,8 +100,8 @@ namespace Greed
                 {
                     Console.Write("Press key...");
                     Console.ReadKey();
-                    player.Points = totalPoints;
-                    zehntausend.CheckTenThousandPoints(player);
+                    player.Points += totalPoints;
+                    zehntausend.WinningGame(player);
                 }
                 else if(zehntausend.Dices > 0)
                 {
