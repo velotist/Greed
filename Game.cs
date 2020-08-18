@@ -25,7 +25,7 @@ namespace Greed
             do
             {
                 Console.WriteLine();
-                Console.Write("...give in a number of 2 to 5 players, please: ");
+                Console.Write("...give in a number between 2 and 5, please: ");
                 _ = int.TryParse(Console.ReadLine(), out numberOfPlayers);
             } while (numberOfPlayers < 2 || numberOfPlayers > 5);
             NumberOfPlayers = numberOfPlayers;
@@ -35,7 +35,6 @@ namespace Greed
 
         public List<Player> NamePlayers(int numberOfPlayers)
         {
-            //List<Player> players = new List<Player>();
             Player player = new Player();
             string name;
             for (int i = 0; i < numberOfPlayers; i++)
@@ -49,7 +48,7 @@ namespace Greed
                     if (name.Length < 2 || name.Length > 20)
                     {
                         isLengthOkay = false;
-                        Console.WriteLine("...please fill in between 2 to 20 characters.");
+                        Console.WriteLine("...please fill in between 2 and 20 characters.");
                         Console.WriteLine();
                     }
                     else
@@ -132,7 +131,7 @@ namespace Greed
             int numbersOccurrenceOf5 = dices.Count(s => s == 5);
             int numbersOccurrenceOf6 = dices.Count(s => s == 6);
             occurrences[0, 0] = 1;
-            occurrences[0, 1] = numbersOccurrenceOf1; // Häufigkeit der Einsen
+            occurrences[0, 1] = numbersOccurrenceOf1;
             occurrences[1, 0] = 2;
             occurrences[1, 1] = numbersOccurrenceOf2;
             occurrences[2, 0] = 3;
@@ -151,39 +150,38 @@ namespace Greed
         {
             int points = 0;
 
-            // Punkte für Augenzahl 1
+            // Points for eyes 1
             if (occurrenceOfEyes[0, 1] <= 2)
             {
                 points += occurrenceOfEyes[0, 1] * 100;
                 Dices -= occurrenceOfEyes[0, 1];
             }
-            // Punkte bei Dreierpasch für Augenzahl 1
+            // Points for triplets eyes 1
             if (occurrenceOfEyes[0, 1] == 3)
             {
                 points += 1000;
                 Dices -= 3;
             }
-            // Punkte bei Viererpasch für Augenzahl 1
+            // Points for quadruple eyes 1
             if (occurrenceOfEyes[0, 1] == 4)
             {
                 points += 10000;
                 Dices -= 4;
             }
-            // Punkte für Augenzahl 5
+            // Points for eyes 5
             if (occurrenceOfEyes[4, 1] <= 2)
             {
                 points += occurrenceOfEyes[4, 1] * 50;
                 Dices -= occurrenceOfEyes[4, 1];
             }
-            // Punkte für eine Straße (1,2,3,4,5 oder 2,3,4,5,6)
-            if ((occurrenceOfEyes[0, 1] == 1 && occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1) ||
-                (occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1 && occurrenceOfEyes[5, 1] == 1))
+            // Points for  1, 2, 3, 4, 5, 6
+            if ((occurrenceOfEyes[0, 1] == 1 && occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1 && occurrenceOfEyes[5,1] == 1))
             {
-                points += 10000;
-                Dices -= 5;
+                points += 1000;
+                Dices -= 6;
             }
 
-            // Punkte für Dreier- und Viererpasch aller Augenzahlen außer Augenzahl 1
+            // Points for triplets or quadruple of eye 2, 3, 4, 5, 6
             for (int i = 1; i < 6; i++)
             {
                 if (occurrenceOfEyes[i, 1] == 3)
