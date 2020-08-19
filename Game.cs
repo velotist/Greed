@@ -10,12 +10,12 @@ namespace Greed
     public class Game
     {
         public List<Player> players = new List<Player>();
-        public int Dices { get; set; }
+        public int NumberOfDice { get; set; }
         public int NumberOfPlayers { get; set; }
 
         public Game()
         {
-            Dices = 6;
+            NumberOfDice = 6;
         }
 
         public int GetNumberOfPlayers()
@@ -91,7 +91,7 @@ namespace Greed
 
             foreach (var item in players)
             {
-                Console.WriteLine("{0,21} dices {1}", item.Name, item.Eyes);
+                Console.WriteLine("{0,21} dice {1}", item.Name, item.Eyes);
             }
 
             int max = players.Max(x => x.Eyes);
@@ -120,16 +120,16 @@ namespace Greed
             return firstPlayer = startPlayers[indexOfStartPlayer];
         }
 
-        public int[,] FindOccurrenceOfEyes(int[] dices)
+        public int[,] FindOccurrenceOfEyes(int[] numberOfDice)
         {
             int[,] occurrences = new int[6, 2];
 
-            int numbersOccurrenceOf1 = dices.Count(s => s == 1);
-            int numbersOccurrenceOf2 = dices.Count(s => s == 2);
-            int numbersOccurrenceOf3 = dices.Count(s => s == 3);
-            int numbersOccurrenceOf4 = dices.Count(s => s == 4);
-            int numbersOccurrenceOf5 = dices.Count(s => s == 5);
-            int numbersOccurrenceOf6 = dices.Count(s => s == 6);
+            int numbersOccurrenceOf1 = numberOfDice.Count(s => s == 1);
+            int numbersOccurrenceOf2 = numberOfDice.Count(s => s == 2);
+            int numbersOccurrenceOf3 = numberOfDice.Count(s => s == 3);
+            int numbersOccurrenceOf4 = numberOfDice.Count(s => s == 4);
+            int numbersOccurrenceOf5 = numberOfDice.Count(s => s == 5);
+            int numbersOccurrenceOf6 = numberOfDice.Count(s => s == 6);
             occurrences[0, 0] = 1;
             occurrences[0, 1] = numbersOccurrenceOf1;
             occurrences[1, 0] = 2;
@@ -154,31 +154,31 @@ namespace Greed
             if (occurrenceOfEyes[0, 1] <= 2)
             {
                 points += occurrenceOfEyes[0, 1] * 100;
-                Dices -= occurrenceOfEyes[0, 1];
+                NumberOfDice -= occurrenceOfEyes[0, 1];
             }
             // Points for triplets eyes 1
             if (occurrenceOfEyes[0, 1] == 3)
             {
                 points += 1000;
-                Dices -= 3;
+                NumberOfDice -= 3;
             }
             // Points for quadruple eyes 1
             if (occurrenceOfEyes[0, 1] == 4)
             {
                 points += 10000;
-                Dices -= 4;
+                NumberOfDice -= 4;
             }
             // Points for eyes 5
             if (occurrenceOfEyes[4, 1] <= 2)
             {
                 points += occurrenceOfEyes[4, 1] * 50;
-                Dices -= occurrenceOfEyes[4, 1];
+                NumberOfDice -= occurrenceOfEyes[4, 1];
             }
             // Points for  1, 2, 3, 4, 5, 6
             if ((occurrenceOfEyes[0, 1] == 1 && occurrenceOfEyes[1, 1] == 1 && occurrenceOfEyes[2, 1] == 1 && occurrenceOfEyes[3, 1] == 1 && occurrenceOfEyes[4, 1] == 1 && occurrenceOfEyes[5,1] == 1))
             {
                 points += 1000;
-                Dices -= 6;
+                NumberOfDice -= 6;
             }
 
             // Points for triplets or quadruple of eye 2, 3, 4, 5, 6
@@ -187,23 +187,23 @@ namespace Greed
                 if (occurrenceOfEyes[i, 1] == 3)
                 {
                     points += occurrenceOfEyes[i, 0] * 100;
-                    Dices -= 3;
+                    NumberOfDice -= 3;
                 }
                 
                 if (occurrenceOfEyes[i, 1] == 4 || occurrenceOfEyes[i, 1] == 5)
                 {
                     points += occurrenceOfEyes[i, 0] * 1000;
-                    Dices -= 4;
+                    NumberOfDice -= 4;
                 }
                 if (occurrenceOfEyes[i, 1] == 6)
                 {
                     points += occurrenceOfEyes[i, 0] * 100;
-                    Dices -= 6;
+                    NumberOfDice -= 6;
                 }
             }
 
-            if (Dices == 0)
-                Dices = 6;
+            if (NumberOfDice <= 0)
+                NumberOfDice = 6;
 
             return points;
         }
@@ -213,7 +213,7 @@ namespace Greed
             Console.Clear();
             foreach (var item in players)
             {
-                Console.WriteLine(String.Format("Spieler: {0,-22} Punkte: {1,-5:D5}", item.Name, item.Points));
+                Console.WriteLine(String.Format("Player: {0,-22} Points: {1,-5:D5}", item.Name, item.Points));
             }
             Console.WriteLine();
         }
@@ -242,7 +242,6 @@ namespace Greed
 
         public void WinningGame(Player player)
         {
-
             ShowPoints(players);
             Console.WriteLine();
             Console.WriteLine("And the winner is...");
@@ -252,7 +251,7 @@ namespace Greed
             Console.WriteLine("With {0} points.", player.Points);
             Console.WriteLine();
 
-            UserInteraction.AwaitKeyAndClearConsole("Press any key to continue...");
+            UserInteraction.AwaitKeyAndClearConsole("Press any key to quit game...");
 
             Environment.Exit(0);
 

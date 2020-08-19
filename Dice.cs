@@ -10,6 +10,7 @@ namespace Greed
     {
         private Random random = new Random();
         public int Eyes { get; set; }
+        private int[] arrayOfDice;
 
         private int DiceEyes()
         {
@@ -18,16 +19,25 @@ namespace Greed
             return eyes;
         }
 
-        public int[] FillDiceCupWithDices(int amountOfDices)
+        public int[] FillDiceCupWithDice(int numberOfDice)
         {
-            int[] dices = new int[amountOfDices];
-
-            for (int i = 0; i < amountOfDices; i++)
+            try
             {
-                dices[i] = DiceEyes();
-            }
+                arrayOfDice = new int[numberOfDice];
 
-            return dices;
+                for (int i = 0; i < numberOfDice; i++)
+                {
+                    arrayOfDice[i] = DiceEyes();
+                }
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine(arrayOfDice);
+                Console.WriteLine("Error when {0} left.", numberOfDice);
+                throw;
+            }
+            
+            return arrayOfDice;
         }
     }
 }
