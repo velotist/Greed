@@ -9,7 +9,6 @@ namespace Greed
     public class Dice
     {
         private Random random = new Random();
-        public int Eyes { get; set; }
         private int[] arrayOfDice;
 
         private int DiceEyes()
@@ -33,8 +32,7 @@ namespace Greed
             catch (OverflowException)
             {
                 Console.WriteLine(arrayOfDice);
-                Console.WriteLine("Error when {0} left.", numberOfDice);
-                throw;
+                Console.WriteLine("Error when {0} dice left.", numberOfDice);
             }
             
             return arrayOfDice;
